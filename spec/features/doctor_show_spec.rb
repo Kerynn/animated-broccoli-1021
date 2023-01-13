@@ -28,7 +28,7 @@ RSpec.describe 'Doctor Show Page' do
       miranda = sloan_hsp.doctors.create!(name: "Miranda Bailey", specialty: "General Surgery", university: "Stanford University")
 
       katie = Patient.create!(name: "Katie Bryce", age: 24)
-      denny = Patient.create!(name: "Debby Duquette", age: 39)
+      denny = Patient.create!(name: "Denny Duquette", age: 39)
       rebecca = Patient.create!(name: "Rebecca Pope", age: 32)
       zola = Patient.create!(name: "Zola Shepherd", age: 2)
 
@@ -54,7 +54,7 @@ RSpec.describe 'Doctor Show Page' do
         meredith = sloan_hsp.doctors.create!(name: "Meredith Grey", specialty: "General Surgery", university: "Harvard University")
   
         katie = Patient.create!(name: "Katie Bryce", age: 24)
-        denny = Patient.create!(name: "Debby Duquette", age: 39)
+        denny = Patient.create!(name: "Denny Duquette", age: 39)
         rebecca = Patient.create!(name: "Rebecca Pope", age: 32)
   
         DoctorPatient.create!(doctor_id: meredith.id, patient_id: katie.id)
@@ -81,7 +81,7 @@ RSpec.describe 'Doctor Show Page' do
         meredith = sloan_hsp.doctors.create!(name: "Meredith Grey", specialty: "General Surgery", university: "Harvard University")
   
         katie = Patient.create!(name: "Katie Bryce", age: 24)
-        denny = Patient.create!(name: "Debby Duquette", age: 39)
+        denny = Patient.create!(name: "Denny Duquette", age: 39)
         rebecca = Patient.create!(name: "Rebecca Pope", age: 32)
   
         DoctorPatient.create!(doctor_id: meredith.id, patient_id: katie.id)
@@ -104,7 +104,7 @@ RSpec.describe 'Doctor Show Page' do
         miranda = sloan_hsp.doctors.create!(name: "Miranda Bailey", specialty: "General Surgery", university: "Stanford University")
 
         katie = Patient.create!(name: "Katie Bryce", age: 24)
-        denny = Patient.create!(name: "Debby Duquette", age: 39)
+        denny = Patient.create!(name: "Denny Duquette", age: 39)
         rebecca = Patient.create!(name: "Rebecca Pope", age: 32)
   
         DoctorPatient.create!(doctor_id: meredith.id, patient_id: katie.id)
