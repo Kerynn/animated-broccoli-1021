@@ -47,5 +47,85 @@ RSpec.describe 'Doctor Show Page' do
         expect(page).to_not have_content(zola.name)
       end
     end
+
+    describe 'delete patient' do 
+      it 'has a button to remove a patient next to each patient' do 
+        sloan_hsp = Hospital.create!(name: "Grey Sloan Memorial Hospital")
+        meredith = sloan_hsp.doctors.create!(name: "Meredith Grey", specialty: "General Surgery", university: "Harvard University")
+  
+        katie = Patient.create!(name: "Katie Bryce", age: 24)
+        denny = Patient.create!(name: "Debby Duquette", age: 39)
+        rebecca = Patient.create!(name: "Rebecca Pope", age: 32)
+  
+        DoctorPatient.create!(doctor_id: meredith.id, patient_id: katie.id)
+        DoctorPatient.create!(doctor_id: meredith.id, patient_id: denny.id)
+        DoctorPatient.create!(doctor_id: meredith.id, patient_id: rebecca.id)
+    
+        visit doctor_path(meredith)
+  
+        within "#doctor_patient_#{katie.id}" do 
+          expect(page).to have_button("Delete #{katie.name}")
+        end
+        
+        within "#doctor_patient_#{denny.id}" do 
+          expect(page).to have_button("Delete #{denny.name}")
+        end
+
+        within "#doctor_patient_#{rebecca.id}" do 
+          expect(page).to have_button("Delete #{rebecca.name}")
+        end
+      end
+
+      it 'will no longer show that patient on the doctor show page when delete button clicked' do 
+        sloan_hsp = Hospital.create!(name: "Grey Sloan Memorial Hospital")
+        meredith = sloan_hsp.doctors.create!(name: "Meredith Grey", specialty: "General Surgery", university: "Harvard University")
+  
+        katie = Patient.create!(name: "Katie Bryce", age: 24)
+        denny = Patient.create!(name: "Debby Duquette", age: 39)
+        rebecca = Patient.create!(name: "Rebecca Pope", age: 32)
+  
+        DoctorPatient.create!(doctor_id: meredith.id, patient_id: katie.id)
+        DoctorPatient.create!(doctor_id: meredith.id, patient_id: denny.id)
+        DoctorPatient.create!(doctor_id: meredith.id, patient_id: rebecca.id)
+    
+        visit doctor_path(meredith)
+
+        expect(page).to have_content(rebecca.name)
+
+        click_button "Delete #{rebecca.name}"
+
+        expect(current_path).to eq doctor_path(meredith)
+        expect(page).to_not have_content(rebecca.name)
+      end
+
+      it 'will still show the same patient if another doctor has been assigned to them' do 
+        sloan_hsp = Hospital.create!(name: "Grey Sloan Memorial Hospital")
+        meredith = sloan_hsp.doctors.create!(name: "Meredith Grey", specialty: "General Surgery", university: "Harvard University")
+        miranda = sloan_hsp.doctors.create!(name: "Miranda Bailey", specialty: "General Surgery", university: "Stanford University")
+
+        katie = Patient.create!(name: "Katie Bryce", age: 24)
+        denny = Patient.create!(name: "Debby Duquette", age: 39)
+        rebecca = Patient.create!(name: "Rebecca Pope", age: 32)
+  
+        DoctorPatient.create!(doctor_id: meredith.id, patient_id: katie.id)
+        DoctorPatient.create!(doctor_id: meredith.id, patient_id: denny.id)
+        DoctorPatient.create!(doctor_id: meredith.id, patient_id: rebecca.id)
+    
+        DoctorPatient.create!(doctor_id: miranda.id, patient_id: rebecca.id)
+
+        visit doctor_path(meredith)
+
+        expect(page).to have_content(rebecca.name)
+
+        click_button "Delete #{rebecca.name}"
+
+        expect(current_path).to eq doctor_path(meredith)
+        expect(page).to_not have_content(rebecca.name)
+
+        visit doctor_path(miranda)
+
+        expect(page).to have_content(rebecca.name)
+      end
+    end 
   end
 end
