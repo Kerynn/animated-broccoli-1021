@@ -1,11 +1,19 @@
 require 'rails_helper'
 
 RSpec.describe 'Doctor Show Page' do 
+
+  let!(:sloan_hsp) { Hospital.create!(name: "Grey Sloan Memorial Hospital") }
+
+  let!(:meredith) { sloan_hsp.doctors.create!(name: "Meredith Grey", specialty: "General Surgery", university: "Harvard University") }
+  let!(:miranda) { sloan_hsp.doctors.create!(name: "Miranda Bailey", specialty: "General Surgery", university: "Stanford University") }
+
+  let!(:katie) { Patient.create!(name: "Katie Bryce", age: 24) }
+  let!(:denny) { Patient.create!(name: "Denny Duquette", age: 39) }
+  let!(:rebecca) { Patient.create!(name: "Rebecca Pope", age: 32) }
+  let!(:zola) { Patient.create!(name: "Zola Shepherd", age: 2) }
+
   describe 'when I visit the doctor show page' do 
     it 'displays the doctor information' do 
-      sloan_hsp = Hospital.create!(name: "Grey Sloan Memorial Hospital")
-      meredith = sloan_hsp.doctors.create!(name: "Meredith Grey", specialty: "General Surgery", university: "Harvard University")
-
       visit doctor_path(meredith)
 
       expect(page).to have_content(meredith.name)
@@ -14,24 +22,12 @@ RSpec.describe 'Doctor Show Page' do
     end
 
     it 'has the name of the hospital the doctor is working' do 
-      sloan_hsp = Hospital.create!(name: "Grey Sloan Memorial Hospital")
-      meredith = sloan_hsp.doctors.create!(name: "Meredith Grey", specialty: "General Surgery", university: "Harvard University")
-
       visit doctor_path(meredith)
 
       expect(page).to have_content("Currently Working: Grey Sloan Memorial Hospital")
     end
 
     it 'shows all the patients the doctor has' do 
-      sloan_hsp = Hospital.create!(name: "Grey Sloan Memorial Hospital")
-      meredith = sloan_hsp.doctors.create!(name: "Meredith Grey", specialty: "General Surgery", university: "Harvard University")
-      miranda = sloan_hsp.doctors.create!(name: "Miranda Bailey", specialty: "General Surgery", university: "Stanford University")
-
-      katie = Patient.create!(name: "Katie Bryce", age: 24)
-      denny = Patient.create!(name: "Denny Duquette", age: 39)
-      rebecca = Patient.create!(name: "Rebecca Pope", age: 32)
-      zola = Patient.create!(name: "Zola Shepherd", age: 2)
-
       DoctorPatient.create!(doctor_id: meredith.id, patient_id: katie.id)
       DoctorPatient.create!(doctor_id: meredith.id, patient_id: denny.id)
       DoctorPatient.create!(doctor_id: meredith.id, patient_id: rebecca.id)
@@ -50,13 +46,6 @@ RSpec.describe 'Doctor Show Page' do
 
     describe 'delete patient' do 
       it 'has a button to remove a patient next to each patient' do 
-        sloan_hsp = Hospital.create!(name: "Grey Sloan Memorial Hospital")
-        meredith = sloan_hsp.doctors.create!(name: "Meredith Grey", specialty: "General Surgery", university: "Harvard University")
-  
-        katie = Patient.create!(name: "Katie Bryce", age: 24)
-        denny = Patient.create!(name: "Denny Duquette", age: 39)
-        rebecca = Patient.create!(name: "Rebecca Pope", age: 32)
-  
         DoctorPatient.create!(doctor_id: meredith.id, patient_id: katie.id)
         DoctorPatient.create!(doctor_id: meredith.id, patient_id: denny.id)
         DoctorPatient.create!(doctor_id: meredith.id, patient_id: rebecca.id)
@@ -77,13 +66,6 @@ RSpec.describe 'Doctor Show Page' do
       end
 
       it 'will no longer show that patient on the doctor show page when delete button clicked' do 
-        sloan_hsp = Hospital.create!(name: "Grey Sloan Memorial Hospital")
-        meredith = sloan_hsp.doctors.create!(name: "Meredith Grey", specialty: "General Surgery", university: "Harvard University")
-  
-        katie = Patient.create!(name: "Katie Bryce", age: 24)
-        denny = Patient.create!(name: "Denny Duquette", age: 39)
-        rebecca = Patient.create!(name: "Rebecca Pope", age: 32)
-  
         DoctorPatient.create!(doctor_id: meredith.id, patient_id: katie.id)
         DoctorPatient.create!(doctor_id: meredith.id, patient_id: denny.id)
         DoctorPatient.create!(doctor_id: meredith.id, patient_id: rebecca.id)
@@ -99,14 +81,6 @@ RSpec.describe 'Doctor Show Page' do
       end
 
       it 'will still show the same patient if another doctor has been assigned to them' do 
-        sloan_hsp = Hospital.create!(name: "Grey Sloan Memorial Hospital")
-        meredith = sloan_hsp.doctors.create!(name: "Meredith Grey", specialty: "General Surgery", university: "Harvard University")
-        miranda = sloan_hsp.doctors.create!(name: "Miranda Bailey", specialty: "General Surgery", university: "Stanford University")
-
-        katie = Patient.create!(name: "Katie Bryce", age: 24)
-        denny = Patient.create!(name: "Denny Duquette", age: 39)
-        rebecca = Patient.create!(name: "Rebecca Pope", age: 32)
-  
         DoctorPatient.create!(doctor_id: meredith.id, patient_id: katie.id)
         DoctorPatient.create!(doctor_id: meredith.id, patient_id: denny.id)
         DoctorPatient.create!(doctor_id: meredith.id, patient_id: rebecca.id)

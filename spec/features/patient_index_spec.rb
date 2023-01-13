@@ -1,19 +1,21 @@
 require 'rails_helper'
 
 RSpec.describe 'Patient Index Page' do 
+
+  let!(:sloan_hsp) { Hospital.create!(name: "Grey Sloan Memorial Hospital") }
+
+  let!(:meredith) { sloan_hsp.doctors.create!(name: "Meredith Grey", specialty: "General Surgery", university: "Harvard University") }
+  let!(:miranda) { sloan_hsp.doctors.create!(name: "Miranda Bailey", specialty: "General Surgery", university: "Stanford University") }
+  let!(:derek) { sloan_hsp.doctors.create!(name: "Derek McDreamy", specialty: "Attending Surgeon", university: "University of Pennsylvania") }
+
+  let!(:katie) { Patient.create!(name: "Katie Bryce", age: 24) }
+  let!(:denny) { Patient.create!(name: "Denny Duquette", age: 39) }
+  let!(:henry) { Patient.create!(name: "Henry Higgins", age: 17) }
+  let!(:rebecca) { Patient.create!(name: "Rebecca Pope", age: 32) }
+  let!(:zola) { Patient.create!(name: "Zola Shepherd", age: 2) }
+
   describe 'when I visit the patient index page' do 
     it 'only shows the unique names of the patients over 18 years old' do 
-      sloan_hsp = Hospital.create!(name: "Grey Sloan Memorial Hospital")
-      meredith = sloan_hsp.doctors.create!(name: "Meredith Grey", specialty: "General Surgery", university: "Harvard University")
-      miranda = sloan_hsp.doctors.create!(name: "Miranda Bailey", specialty: "General Surgery", university: "Stanford University")
-      derek = sloan_hsp.doctors.create!(name: "Derek McDreamy", specialty: "Attending Surgeon", university: "University of Pennsylvania")
-
-      katie = Patient.create!(name: "Katie Bryce", age: 24)
-      denny = Patient.create!(name: "Denny Duquette", age: 39)
-      henry = Patient.create!(name: "Henry Higgins", age: 17)
-      rebecca = Patient.create!(name: "Rebecca Pope", age: 32)
-      zola = Patient.create!(name: "Zola Shepherd", age: 2)
-
       DoctorPatient.create!(doctor_id: meredith.id, patient_id: katie.id)
       DoctorPatient.create!(doctor_id: meredith.id, patient_id: denny.id)
       DoctorPatient.create!(doctor_id: meredith.id, patient_id: henry.id)
@@ -34,17 +36,6 @@ RSpec.describe 'Patient Index Page' do
     end
 
     it 'lists the names in ascending alphabetical order' do 
-      sloan_hsp = Hospital.create!(name: "Grey Sloan Memorial Hospital")
-      meredith = sloan_hsp.doctors.create!(name: "Meredith Grey", specialty: "General Surgery", university: "Harvard University")
-      miranda = sloan_hsp.doctors.create!(name: "Miranda Bailey", specialty: "General Surgery", university: "Stanford University")
-      derek = sloan_hsp.doctors.create!(name: "Derek McDreamy", specialty: "Attending Surgeon", university: "University of Pennsylvania")
-
-      katie = Patient.create!(name: "Katie Bryce", age: 24)
-      denny = Patient.create!(name: "Denny Duquette", age: 39)
-      henry = Patient.create!(name: "Henry Higgins", age: 17)
-      rebecca = Patient.create!(name: "Rebecca Pope", age: 32)
-      zola = Patient.create!(name: "Zola Shepherd", age: 2)
-
       DoctorPatient.create!(doctor_id: meredith.id, patient_id: katie.id)
       DoctorPatient.create!(doctor_id: meredith.id, patient_id: denny.id)
       DoctorPatient.create!(doctor_id: meredith.id, patient_id: henry.id)
